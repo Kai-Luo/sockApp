@@ -1,25 +1,22 @@
 <?php 
-
-
 namespace SockApp;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
 class Manager implements MessageComponentInterface {
+
     protected $clients;
     protected $games;
+
     public function __construct() {
-
         $this->clients = new \SplObjectStorage;
-        $this->games= new \SplObjectStorage; 
-
-        
+        $this->games = new \SplObjectStorage; 
     }
 
     public function onOpen(ConnectionInterface $conn) {
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
-        $game= new Game($conn->resourceId); //Ahora no se sobreescribe la variable game.
+        $game = new Game($conn->resourceId); 
         $conn->send($game->firstLoad());
         $this->games->attach($game); //  Se añade un nuevo juego a la array de objetos games.
         echo "New connection! ({$conn->resourceId})\n";
@@ -27,16 +24,13 @@ class Manager implements MessageComponentInterface {
 
     public function onMessage(ConnectionInterface $from, $msg) {
         $numRecv = count($this->clients) - 1;
-        $jsonMsg=json_decode($msg);
-        echo sprintf('Connection %d sending message to %d other connection%s' . "\n"
-            , $from->resourceId, $numRecv, $numRecv == 1 ? '' : 's');
+        $jsonMsg = json_decode($msg);
+        echo sprintf('Connection %d sending message to %d other connection%s' . "\n", $from->resourceId, $numRecv, $numRecv == 1 ? '' : 's');
         foreach ($this->games as $el) {
-            if($el->id==$from->resourceId){
+            if($el->id == $from->resourceId){
                 $from->send($el->validate($jsonMsg->{"answer"}));
             }
         }
-
-        
 
        /* ++++++++  ENVIAR A TODOS  +++++++++ 
        foreach ($this->clients as $client) {
