@@ -2,7 +2,7 @@ window.onload = connection;
 
 var conn;
 
-function connection(){
+function connection() {
 
 	conn = new WebSocket('ws://localhost:8080');
 	conn.onopen = function(e) {
