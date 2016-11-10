@@ -1,4 +1,4 @@
-window.onload=connection;
+window.onload = connection;
 
 var conn;
 
@@ -21,15 +21,15 @@ function connection(){
 	};
 }
 
-function decode(data){
-	var msg=JSON.parse(data);
+function decode(data) {
+	var msg = JSON.parse(data);
 	selection(msg);
 	
 }
 
-function selection(msg){
+function selection(msg) {
 
-	switch(msg.id){
+	switch (msg.id) {
 		case "response":
 			loadResponse(msg);
 		break;
@@ -43,25 +43,20 @@ function selection(msg){
 
 function loadResponse(msg){
 
-	if(msg.subId==="incorrecta"){
+	if(msg.subId === "incorrecta") {
 		incorrecta();
-	}
-	else if(msg.subId==="correcta"){
-
+	} else if (msg.subId === "correcta") {
 		loadExercise(msg.ex);
 	}
 }
 
-function incorrecta(){
+function incorrecta() {
 	///imprimir respuesta incorrecta en algun div
 }
-function loadExercise(ex){
-	
-	document.getElementById("ex").innerHTML=ex;
-
+function loadExercise(ex) {
+	document.getElementById("ex").innerHTML = ex;
 }
-function answer(){
-
-	var respuesta=document.getElementById("respuesta").value;
-	conn.send('{"answer":'+respuesta+'}');
+function answer() {
+	var respuesta = document.getElementById("respuesta").value;
+	conn.send('{"answer":' + respuesta + '}');
 }
